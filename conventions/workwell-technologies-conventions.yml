@@ -1,0 +1,75 @@
+generated: '2026-07-21'
+method: searched
+source: https://uattend.zendesk.com/hc/en-us/articles/48783008798875-uAttend-API
+description: >-
+  Cross-cutting request/response conventions of the WorkWell Technologies API
+  (uAttend), captured from the provider's published API documentation. A small
+  read-only integration API: three POST endpoints over HTTPS behind AWS API
+  Gateway, JSON bodies in and out, API-key authentication.
+base_url: https://api.workwelltech.com
+api_style: >-
+  RPC-flavored REST over HTTPS behind AWS API Gateway. All operations —
+  including reads — use POST with a JSON request body; pass an empty JSON
+  object {} when no parameters are needed.
+
+authentication:
+  scheme: API key in the x-api-key request header (exact lowercase header name)
+  scope: Account-scoped — a key grants access to all data in the uAttend account
+  issuance: >-
+    Manual — request via WorkWell Technologies support / ticket, stating the
+    system being integrated, intended data use, and request frequency.
+  network_restrictions: >-
+    The API Gateway may enforce IP-based resource policies; a 403 "explicit
+    deny in an identity-based policy" means the caller's IP is not allowlisted
+    (not a key problem).
+  detail: authentication/workwell-technologies-authentication.yml
+
+idempotency:
+  supported: false
+  note: >-
+    No idempotency-key mechanism is documented. All documented operations are
+    data retrievals (POST-as-read), so retries are naturally safe, but no
+    idempotency contract is published.
+
+pagination:
+  style: page
+  applies_to: POST /reports/punch only
+  request_params:
+    UsePaging: boolean (required) — true to paginate, false to return all results
+    PageSize: integer — records per page; required when UsePaging is true
+    PageNumber: integer — 0-indexed page; required when UsePaging is true
+  response_fields:
+    UsePaging: whether results were paginated
+    PageSize: records per page
+    PageNumber: current page (0-indexed)
+    Total: total matching records (when paging is off)
+  constraints: EndDate must be within 3 months of StartDate; window larger ranges manually.
+
+content_type: application/json required on every request
+
+data_formats:
+  durations: 'Strings in HH:mm format (40 hours = "40:00", 4h15m = "4:15")'
+  dates: 'Strings in yyyy-mm-dd format (e.g. "2024-02-15")'
+  punch_times: '12-hour strings (e.g. "08:00 AM")'
+  pay_codes: 'REG=Regular, OT1=Overtime 1, OT2=Overtime 2, VAC=Vacation, SIC=Sick, HOL=Holiday, OTH=Other'
+  punch_pair_paycodes: '1=Regular, 6=Break, 7=Lunch'
+  punch_report_paycodes: '1=Regular, 2=Vacation, 3=Sick, 4=Holiday, 5=Other'
+
+field_expansion: not supported
+metadata: not supported
+request_tracing: >-
+  No request-id header documented; support asks for request details and
+  timestamp when troubleshooting.
+versioning: >-
+  No API versioning scheme is documented; the base URL carries no version
+  segment.
+
+error_envelope:
+  gateway: '{"message": "..."} (AWS API Gateway style)'
+  punch_report: Response.Success / Response.Keys / Response.Messages dictionaries
+  detail: errors/workwell-technologies-problem-types.yml
+
+rate_limits:
+  signaled_by: HTTP 429 Too Many Requests
+  limits_published: false
+  guidance: Slow down request frequency; implement retry logic with exponential backoff.

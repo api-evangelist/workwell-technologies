@@ -1,0 +1,63 @@
+generated: '2026-07-21'
+method: searched
+description: >-
+  Probe of the /.well-known/ discovery surface across Workwell Technologies
+  hosts. No well-known documents were found. workwelltech.com answers every
+  request with a 202 bot-challenge (SiteGround captcha) so its results are
+  inconclusive; trackmytime.com 302-redirects every path to its login page;
+  api.workwelltech.com (AWS API Gateway) returns 403 for unauthenticated
+  requests. uattend.com serves real 404s. A genuine llms.txt was found at
+  https://uattend.com/llms.txt and is saved at
+  llms/workwell-technologies-llms.txt.
+hosts:
+- host: https://uattend.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://workwelltech.com
+  note: 202 = SiteGround bot-challenge interstitial on every path; inconclusive
+  documents:
+  - path: /.well-known/security.txt
+    status: 202
+  - path: /.well-known/openid-configuration
+    status: 202
+  - path: /.well-known/oauth-authorization-server
+    status: 202
+  - path: /.well-known/api-catalog
+    status: 202
+  - path: /.well-known/ai-plugin.json
+    status: 202
+- host: https://trackmytime.com
+  note: 302 redirect to /Login/Login.aspx on every path
+  documents:
+  - path: /.well-known/security.txt
+    status: 302
+  - path: /.well-known/openid-configuration
+    status: 302
+  - path: /.well-known/oauth-authorization-server
+    status: 302
+  - path: /.well-known/api-catalog
+    status: 302
+  - path: /.well-known/ai-plugin.json
+    status: 302
+- host: https://api.workwelltech.com
+  note: AWS API Gateway; 403 for unauthenticated requests on every path
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+  - path: /.well-known/openid-configuration
+    status: 403
+  - path: /.well-known/oauth-authorization-server
+    status: 403
+  - path: /.well-known/api-catalog
+    status: 403
+  - path: /.well-known/ai-plugin.json
+    status: 403

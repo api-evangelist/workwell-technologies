@@ -1,0 +1,1068 @@
+openapi: 3.0.3
+info:
+  title: WorkWell Technologies API (uAttend)
+  description: >-
+    The WorkWell Technologies API allows you to programmatically retrieve
+    employee, timecard, and punch data from your uAttend account. All endpoints
+    use HTTPS and are authenticated via an API key passed in the x-api-key
+    request header. API keys are account-scoped — they grant access to all data
+    within your uAttend account. Request bodies are JSON objects; even when no
+    parameters are needed, pass an empty JSON object. This OpenAPI was generated
+    by API Evangelist from the provider's published API documentation
+    (https://uattend.zendesk.com/hc/en-us/articles/48783008798875-uAttend-API);
+    the provider does not publish a machine-readable spec.
+  version: 1.0.0
+  contact:
+    name: WorkWell Technologies Support
+    url: https://uattend.zendesk.com/hc/en-us
+  x-apievangelist:
+    generated: '2026-07-21'
+    method: generated
+    source: https://uattend.zendesk.com/hc/en-us/articles/48783008798875-uAttend-API
+servers:
+- url: https://api.workwelltech.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Users
+  description: User records for the uAttend account
+- name: Timecards
+  description: Per-user, per-pay-period timecards
+- name: Punch Reports
+  description: Raw punch records across a date range
+paths:
+  /user:
+    post:
+      operationId: getUsers
+      summary: Retrieve user records for the account
+      description: >-
+        Returns user records for your uAttend account. By default, all users
+        are returned. Use the optional request body parameters to filter by
+        user ID, name, or payroll number. Pass an empty JSON object to return
+        all users.
+      tags:
+      - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetUsersRequest'
+            examples:
+              allUsers:
+                summary: All users
+                value: {}
+              singleUser:
+                summary: Single user
+                value:
+                  UserId: 12345
+      responses:
+        '200':
+          description: User records for the account.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUsersResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /timecards:
+    post:
+      operationId: getTimecard
+      summary: Retrieve timecard data for a user and pay period
+      description: >-
+        Returns the timecard for a specified user. If no date is provided, the
+        current pay period is returned. If a date is supplied, the timecard
+        covering that date is returned. All time durations are strings in HH:mm
+        format; dates are yyyy-mm-dd; punch times are 12-hour strings.
+      tags:
+      - Timecards
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetTimecardRequest'
+            examples:
+              currentPayPeriod:
+                summary: Current pay period
+                value:
+                  UserId: 12345
+              specificPayPeriod:
+                summary: Specific pay period (date within it)
+                value:
+                  UserId: 12345
+                  Date: '2024-01-15'
+      responses:
+        '200':
+          description: The timecard covering the requested pay period.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTimeCardResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /reports/punch:
+    post:
+      operationId: getPunchReport
+      summary: Retrieve raw punch records across a date range
+      description: >-
+        Returns raw punch records for one or more users over a specified date
+        range. Supports pagination for large result sets. If no user IDs are
+        supplied, punches for all account users are returned. EndDate cannot be
+        more than 3 months after StartDate — for larger ranges, make multiple
+        requests with sequential date windows.
+      tags:
+      - Punch Reports
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PunchReportRequest'
+            examples:
+              allUsersNoPaging:
+                summary: All users, no paging
+                value:
+                  StartDate: '2024-01-01'
+                  EndDate: '2024-01-31'
+                  UsePaging: false
+              specificUsersWithPaging:
+                summary: Specific users, with paging
+                value:
+                  StartDate: '2024-01-01'
+                  EndDate: '2024-03-31'
+                  UserIds:
+                  - 12345
+                  - 67890
+                  UsePaging: true
+                  PageSize: 100
+                  PageNumber: 0
+      responses:
+        '200':
+          description: Punch records matching the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PunchReportResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: >-
+        Account-scoped API key provided by WorkWell Technologies support. Keys
+        grant access to all data within your uAttend account and are active
+        immediately upon issuance. To request a key, contact support with the
+        system you are integrating, how you plan to use the data, and how often
+        you plan to make requests. The API Gateway may additionally enforce
+        IP-based access policies at the infrastructure level.
+  responses:
+    BadRequest:
+      description: >-
+        Bad Request — malformed JSON in the request body, or a required field
+        is missing.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: >-
+        Unauthorized — the x-api-key header is missing or the key value is
+        incorrect.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: >-
+        Forbidden — an AWS identity-based policy is blocking the request
+        (IP/network restriction), the key lacks permission for the resource, or
+        the endpoint URL is incorrect (Missing Authentication Token).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: >-
+        Not Found — the endpoint URL is incorrect. Verify the path matches
+        exactly /user, /timecards, or /reports/punch.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: >-
+        Too Many Requests — rate limit exceeded. Slow down request frequency
+        and implement retry logic with exponential backoff.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: >-
+        Internal Server Error — an unexpected server-side error occurred. If
+        this persists, contact WorkWell Technologies support with your request
+        details and timestamp.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      description: >-
+        AWS API Gateway style error envelope, e.g. {"message": "Unauthorized"}.
+      properties:
+        message:
+          type: string
+          description: Human-readable error message.
+    GetUsersRequest:
+      type: object
+      description: All parameters are optional. Omit them or pass {} to return all users.
+      properties:
+        UserId:
+          type: integer
+          description: Filter to a specific user by their numeric ID.
+        Name:
+          type: string
+          description: Filter by partial or full name match.
+        PayrollNumber:
+          type: string
+          description: Filter by payroll number.
+    GetUsersResponse:
+      type: object
+      properties:
+        Users:
+          type: array
+          description: User records; each element represents one user.
+          items:
+            $ref: '#/components/schemas/User'
+    User:
+      type: object
+      description: >-
+        A uAttend user record. The /user endpoint returns the core fields by
+        default; the full internal schema (snake_case fields) is documented in
+        the provider's appendix and included here for reference.
+      properties:
+        UserId:
+          type: number
+          description: Unique numeric identifier for the user.
+        FirstName:
+          type: string
+          description: First name.
+        LastName:
+          type: string
+          description: Last name.
+        Role:
+          type: string
+          description: 'Role: Admin, Supervisor, or Employee.'
+        DepartmentId:
+          type: number
+          description: Numeric ID of the user's home department.
+        IsActive:
+          type: boolean
+          description: true if the user is currently active.
+        Email:
+          type: string
+          description: Email address.
+        PayrollNumber:
+          type: string
+          description: Payroll number (if configured).
+        PhoneNumber:
+          type: string
+          description: Phone number (if configured).
+        EmployeeReferenceID:
+          type: string
+          description: Custom employee reference ID.
+        EmployeeReferenceNote:
+          type: string
+          description: Notes associated with the employee reference.
+    UserFull:
+      type: object
+      description: >-
+        Full internal user schema (appendix reference). Field names are
+        snake_case in the internal schema.
+      properties:
+        id:
+          type: number
+          description: Internal user identifier.
+        account_id:
+          type: integer
+          description: Account identifier.
+        role_id:
+          type: integer
+          description: 'Role: 1=Admin, 2=Supervisor, 3=Employee.'
+        right_id:
+          type: integer
+          description: 'Timecard edit rights: 1=true, 0=false.'
+        department_id:
+          type: integer
+          description: Home department identifier.
+        timezone_id:
+          type: integer
+          description: Timezone identifier.
+        email:
+          type: string
+          description: Email address.
+        first_name:
+          type: string
+          description: First name.
+        last_name:
+          type: string
+          description: Last name.
+        phone:
+          type: string
+          description: Phone number.
+        payroll_number:
+          type: string
+          description: Payroll number.
+        pin_number:
+          type: string
+          description: PIN number.
+        badge_number:
+          type: string
+          description: Badge number.
+        weekly_rule:
+          type: boolean
+          description: Weekly overtime rule enabled.
+        last_punch:
+          type: string
+          format: date
+          description: Date of the user's last regular punch.
+        last_punch_type:
+          type: integer
+          description: 'Last punch method: 1=Web, 2=Phone, 3=Terminal, 4=Manual.'
+        last_punch_location:
+          type: string
+          description: Location string for last punch (timeclock name, IP, geolocation).
+        vacation_start_date:
+          type: string
+          format: date
+          description: Vacation accrual start date.
+        vacation_start_balance:
+          type: number
+          description: Vacation starting balance.
+        vacation_rate:
+          type: number
+          description: Vacation accrual rate.
+        sick_start_date:
+          type: string
+          format: date
+          description: Sick accrual start date.
+        sick_start_balance:
+          type: number
+          description: Sick starting balance.
+        sick_rate:
+          type: number
+          description: Sick accrual rate.
+        other_start_date:
+          type: string
+          format: date
+          description: Other accrual start date.
+        other_start_balance:
+          type: number
+          description: Other accrual starting balance.
+        other_rate:
+          type: number
+          description: Other accrual rate.
+        created_date:
+          type: string
+          format: date
+          description: Account creation date.
+        inactive_date:
+          type: string
+          format: date
+          description: Date user was deactivated (if applicable).
+        is_timecard_viewable:
+          type: boolean
+          description: Whether the user can view their timecard.
+        is_accrual_viewable:
+          type: boolean
+          description: Whether the user can view accrual balances.
+        is_department_transfer:
+          type: boolean
+          description: Whether department transfer is enabled.
+        is_ip_limited:
+          type: boolean
+          description: Whether smartphone punching is IP-restricted.
+        is_callerid_limited:
+          type: boolean
+          description: Whether call punching is caller-ID restricted.
+        is_holiday:
+          type: boolean
+          description: Whether holiday tracking is enabled.
+        is_active:
+          type: boolean
+          description: Whether the user is currently active.
+        enable_notify:
+          type: boolean
+          description: Email notification enabled.
+        allow_iphone_punch:
+          type: boolean
+          description: uAttend app punching allowed.
+        employee_approval:
+          type: boolean
+          description: Employee timecard approval required.
+        allow_website_punch:
+          type: boolean
+          description: Website punch allowed.
+        smartphone_access:
+          type: boolean
+          description: Smartphone portal access enabled.
+        allow_group_punch:
+          type: boolean
+          description: Group punch allowed.
+        visit_count:
+          type: integer
+          description: Total portal visits.
+        notice:
+          type: string
+          description: Notice text.
+        notes:
+          type: string
+          description: Internal notes.
+        last_punch_id:
+          type: number
+          description: Identifier of the last punch record.
+    GetTimecardRequest:
+      type: object
+      required:
+      - UserId
+      properties:
+        UserId:
+          type: integer
+          description: The ID of the user whose timecard to retrieve.
+        Date:
+          type: string
+          format: date
+          description: >-
+            A date within the desired pay period (yyyy-mm-dd). Defaults to the
+            current pay period if omitted.
+    GetTimeCardResponse:
+      type: object
+      description: Top-level wrapper for a timecard response.
+      properties:
+        PayrollNumber:
+          type: string
+          description: Payroll number of the user.
+        ApprovalVerbiage:
+          type: string
+          description: Approval status of the timecard.
+        IsLock:
+          type: integer
+          description: 1 if the timecard is locked.
+        FirstName:
+          type: string
+          description: First name.
+        LastName:
+          type: string
+          description: Last name.
+        StartDate:
+          type: string
+          format: date
+          description: Pay period start date (yyyy-mm-dd).
+        EndDate:
+          type: string
+          format: date
+          description: Pay period end date (yyyy-mm-dd).
+        CurrentPayPeriodStart:
+          type: string
+          description: Start of the current pay period.
+        CurrentPayPeriodEnd:
+          type: string
+          description: End of the current pay period.
+        Timecard:
+          $ref: '#/components/schemas/Timecard'
+        ExtendedPunchData:
+          type: array
+          description: Extended punch data grouped by date.
+          items:
+            $ref: '#/components/schemas/TimecardPunchData'
+        Jobs:
+          type: array
+          description: Job information (JobID, JobNumber, JobName, JobDetails).
+          items:
+            $ref: '#/components/schemas/JobSimple'
+        Departments:
+          type: array
+          description: Departments accessible to the user.
+          items:
+            $ref: '#/components/schemas/Department'
+        ExpenseCodes:
+          type: array
+          description: Expense codes available.
+          items:
+            $ref: '#/components/schemas/ExpenseCode'
+        HomeDepartment:
+          $ref: '#/components/schemas/HomeDepartment'
+    Timecard:
+      type: object
+      description: >-
+        Pay period totals. All time durations are strings in HH:mm format (40
+        hours = "40:00"). Pay codes: REG = Regular, OT1 = Overtime 1, OT2 =
+        Overtime 2, VAC = Vacation, SIC = Sick, HOL = Holiday, OTH = Other.
+      properties:
+        StartDate:
+          type: string
+          format: date
+          description: Pay period start date.
+        EndDate:
+          type: string
+          format: date
+          description: Pay period end date.
+        FirstName:
+          type: string
+          description: First name.
+        LastName:
+          type: string
+          description: Last name.
+        PayrollNumber:
+          type: string
+          description: Payroll number.
+        WeekCount:
+          type: integer
+          description: Number of weeks in the pay period (1-6).
+        Week1:
+          type: string
+          description: Total hours worked in week 1 (HH:mm). Unused weeks return "0:00".
+        Week2:
+          type: string
+          description: Total hours worked in week 2 (HH:mm).
+        Week3:
+          type: string
+          description: Total hours worked in week 3 (HH:mm).
+        Week4:
+          type: string
+          description: Total hours worked in week 4 (HH:mm).
+        Week5:
+          type: string
+          description: Total hours worked in week 5 (HH:mm).
+        Week6:
+          type: string
+          description: Total hours worked in week 6 (HH:mm).
+        RegularTime:
+          type: string
+          description: Total regular hours (HH:mm).
+        Overtime1Time:
+          type: string
+          description: Total overtime 1 hours (HH:mm).
+        Overtime2Time:
+          type: string
+          description: Total overtime 2 hours (HH:mm).
+        VacationTime:
+          type: string
+          description: Total vacation hours (HH:mm).
+        HolidayTime:
+          type: string
+          description: Total holiday hours (HH:mm).
+        SickTime:
+          type: string
+          description: Total sick hours (HH:mm).
+        OtherTime:
+          type: string
+          description: Total other hours (HH:mm).
+        SumOfTotalHours:
+          type: string
+          description: Grand total of all pay code hours (HH:mm).
+        RegularGrossPay:
+          type: string
+          description: Gross pay for regular time.
+        Overtime1GrossPay:
+          type: string
+          description: Gross pay for overtime 1.
+        Overtime2GrossPay:
+          type: string
+          description: Gross pay for overtime 2.
+        VacationGrossPay:
+          type: string
+          description: Gross pay for vacation.
+        HolidayGrossPay:
+          type: string
+          description: Gross pay for holiday.
+        SickGrossPay:
+          type: string
+          description: Gross pay for sick time.
+        OtherGrossPay:
+          type: string
+          description: Gross pay for other time.
+        TotalGrossPay:
+          type: string
+          description: Total gross pay across all pay codes.
+        EmployeeReferenceID:
+          type: string
+          description: Employee reference ID.
+        ClientReferenceID:
+          type: string
+          description: Client reference ID.
+        Workdays:
+          type: array
+          description: List of individual workday records.
+          items:
+            $ref: '#/components/schemas/Workday'
+        Tips:
+          type: array
+          description: List of tip records.
+          items:
+            $ref: '#/components/schemas/Tip'
+        Accruals:
+          type: array
+          description: List of benefit accrual balances.
+          items:
+            $ref: '#/components/schemas/Accrual'
+    Workday:
+      type: object
+      description: One entry per day that has punch activity.
+      properties:
+        Day1:
+          type: string
+          description: Day abbreviation (e.g., "Mon").
+        Day2:
+          type: string
+          description: Short date (e.g., "11/30/19").
+        Day3:
+          type: string
+          description: ISO date (e.g., "2019-11-30").
+        RegularTime:
+          type: string
+          description: Daily regular hours (HH:mm).
+        Overtime1Time:
+          type: string
+          description: Daily overtime 1 hours (HH:mm).
+        Overtime2Time:
+          type: string
+          description: Daily overtime 2 hours (HH:mm).
+        VacationTime:
+          type: string
+          description: Daily vacation hours (HH:mm).
+        HolidayTime:
+          type: string
+          description: Daily holiday hours (HH:mm).
+        SickTime:
+          type: string
+          description: Daily sick hours (HH:mm).
+        OtherTime:
+          type: string
+          description: Daily other hours (HH:mm).
+        PunchPairs:
+          type: array
+          description: List of individual in/out punch pairs for this day.
+          items:
+            $ref: '#/components/schemas/PunchPair'
+    PunchPair:
+      type: object
+      description: >-
+        One entry per in/out punch pair. The last punch pair of a day has
+        IsLast = 1.
+      properties:
+        PunchId:
+          type: string
+          description: Unique punch identifier.
+        Paycode:
+          type: string
+          description: Pay code (1=Regular, 6=Break, 7=Lunch).
+        DepartmentName:
+          type: string
+          description: >-
+            Department name for regular punches; "Break" or "Lunch" for
+            paycodes 6/7.
+        InDate:
+          type: string
+          description: In punch date (yyyy-mm-dd).
+        OutDate:
+          type: string
+          description: Out punch date (yyyy-mm-dd).
+        InTime:
+          type: string
+          description: In punch time (hh:mm AM/PM).
+        OutTime:
+          type: string
+          description: Out punch time (hh:mm AM/PM).
+        RegularHours:
+          type: string
+          description: Regular hours for this punch pair (HH:mm).
+        Overtime1Hours:
+          type: string
+          description: Overtime 1 hours for this punch pair (HH:mm).
+        Overtime2Hours:
+          type: string
+          description: Overtime 2 hours for this punch pair (HH:mm).
+        VacationHours:
+          type: string
+          description: Vacation hours for this punch pair (HH:mm).
+        HolidayHours:
+          type: string
+          description: Holiday hours for this punch pair (HH:mm).
+        SickHours:
+          type: string
+          description: Sick hours for this punch pair (HH:mm).
+        OtherHours:
+          type: string
+          description: Other hours for this punch pair (HH:mm).
+        TotalHours:
+          type: string
+          description: Total hours for this punch pair (HH:mm).
+        RegularGrossPay:
+          type: number
+          description: Gross pay — regular time.
+        TotalGrossPay:
+          type: number
+          description: Total gross pay for this punch pair.
+        Description:
+          type: string
+          description: Optional description.
+        Note:
+          type: string
+          description: Optional note.
+        IsLast:
+          type: integer
+          description: 1 if this is the last punch pair for the day.
+    Tip:
+      type: object
+      properties:
+        TipId:
+          type: integer
+          description: Unique tip identifier.
+        TipCode:
+          type: string
+          description: Tip code.
+        TotalMinutes:
+          type: string
+          description: Total minutes for the tip entry.
+        TipDepartmentName:
+          type: string
+          description: Department associated with the tip.
+        TotalTipMinute:
+          type: string
+          description: Total tip minutes.
+    Accrual:
+      type: object
+      properties:
+        Code:
+          type: string
+          description: Benefit category code (e.g., "VAC", "SIC").
+        Accrued:
+          type: string
+          description: Total accrued balance (HH:mm, e.g., "80:00").
+        Used:
+          type: string
+          description: Hours used (HH:mm, e.g., "20:00").
+        Available:
+          type: string
+          description: Remaining available balance (HH:mm, e.g., "60:00").
+    TimecardPunchData:
+      type: object
+      description: Extended data grouped by date, available in the ExtendedPunchData list.
+      properties:
+        Date:
+          type: string
+          description: Date the records belong to (yyyy-mm-dd).
+        PunchHistory:
+          type: array
+          description: Punch edit history for the day.
+          items:
+            type: object
+        Tips:
+          type: array
+          description: Tip entries for the day.
+          items:
+            type: object
+        JobPunches:
+          type: array
+          description: Job-specific punch records for the day.
+          items:
+            $ref: '#/components/schemas/JobPunches'
+        Expenses:
+          type: array
+          description: Expense entries for the day.
+          items:
+            type: object
+    JobPunches:
+      type: object
+      properties:
+        UserId:
+          type: integer
+          description: User identifier.
+        PunchId:
+          type: integer
+          description: Punch identifier.
+        JobId:
+          type: integer
+          description: Job identifier.
+        JobNumber:
+          type: string
+          description: Job number.
+        JobName:
+          type: string
+          description: Job name.
+        JobDetailId:
+          type: integer
+          description: Job detail identifier.
+        JobDetailName:
+          type: string
+          description: Job detail name.
+        JobInDate:
+          type: string
+          description: Job in punch date.
+        JobInTime:
+          type: string
+          description: Job in punch time.
+        JobOutDate:
+          type: string
+          description: Job out punch date.
+        JobOutTime:
+          type: string
+          description: Job out punch time.
+        DepartmentId:
+          type: integer
+          description: Department identifier.
+        JobDescription:
+          type: string
+          description: Job description.
+        JobNote:
+          type: string
+          description: Job note.
+        SubJobDetails:
+          type: array
+          description: Nested sub-job punch records.
+          items:
+            $ref: '#/components/schemas/JobPunches'
+    JobSimple:
+      type: object
+      description: Job information.
+      properties:
+        JobID:
+          type: integer
+          description: Job identifier.
+        JobNumber:
+          type: string
+          description: Job number.
+        JobName:
+          type: string
+          description: Job name.
+        JobDetails:
+          type: array
+          description: Job details.
+          items:
+            type: object
+    Department:
+      type: object
+      description: A department accessible to the user.
+      properties:
+        DepartmentId:
+          type: integer
+          description: Department identifier.
+        DepartmentCode:
+          type: string
+          description: Department code.
+        DepartmentName:
+          type: string
+          description: Department name.
+    ExpenseCode:
+      type: object
+      description: An expense code available on the account.
+      properties:
+        Code:
+          type: string
+          description: Expense code.
+    HomeDepartment:
+      type: object
+      description: Home department details.
+      properties:
+        DepartmentId:
+          type: integer
+          description: Department identifier.
+        DepartmentName:
+          type: string
+          description: Department name.
+    PunchReportRequest:
+      type: object
+      required:
+      - StartDate
+      - EndDate
+      - UsePaging
+      properties:
+        StartDate:
+          type: string
+          format: date
+          description: Start of the date range (yyyy-mm-dd).
+        EndDate:
+          type: string
+          format: date
+          description: >-
+            End of the date range (yyyy-mm-dd). Maximum range: 3 months from
+            StartDate.
+        UserIds:
+          type: array
+          description: >-
+            Filter to specific user IDs. Returns all users if omitted or
+            empty.
+          items:
+            type: integer
+        UsePaging:
+          type: boolean
+          description: >-
+            Set to true to paginate results. Set to false to return all
+            results at once.
+        PageSize:
+          type: integer
+          description: Number of records per page. Required when UsePaging is true.
+        PageNumber:
+          type: integer
+          description: 0-indexed page number to retrieve. Required when UsePaging is true.
+    PunchReportResponse:
+      type: object
+      properties:
+        Response:
+          $ref: '#/components/schemas/ResponseObject'
+        UsePaging:
+          type: boolean
+          description: Whether results were paginated.
+        PageSize:
+          type: integer
+          description: Records per page.
+        PageNumber:
+          type: integer
+          description: Current page (0-indexed).
+        Total:
+          type: integer
+          description: Total matching records (when paging is off).
+        UserIds:
+          type: array
+          description: User IDs included in results. Empty = all users.
+          items:
+            type: integer
+            format: int64
+        PunchReportLineItems:
+          type: array
+          description: The punch records.
+          items:
+            $ref: '#/components/schemas/PunchReportLineItem'
+    ResponseObject:
+      type: object
+      description: Success flag and error detail.
+      properties:
+        Success:
+          type: boolean
+          description: true if the request completed without errors.
+        Keys:
+          type: object
+          description: Error message keys paired to the field they relate to.
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        Messages:
+          type: object
+          description: Human-readable error messages paired to the field.
+          additionalProperties:
+            type: array
+            items:
+              type: string
+    PunchReportLineItem:
+      type: object
+      description: One record per in/out punch pair.
+      properties:
+        Id:
+          type: integer
+          format: int64
+          description: Unique punch record identifier.
+        UserId:
+          type: integer
+          description: User the punch belongs to.
+        DepartmentId:
+          type: integer
+          description: Department the punch is attributed to.
+        PaycodeId:
+          type: integer
+          description: 1=Regular, 2=Vacation, 3=Sick, 4=Holiday, 5=Other.
+        PunchDay:
+          type: integer
+          description: Unix integer representing the workday date.
+        PunchDate:
+          type: string
+          format: date
+          description: Workday date.
+        DayAbbrev:
+          type: string
+          description: 'Day of week abbreviation: Mon, Tue, Wed, Thu, Fri, Sat, Sun.'
+        DepartmentCode:
+          type: string
+          description: Department code.
+        DepartmentName:
+          type: string
+          description: Department name.
+        FirstName:
+          type: string
+          description: User's first name.
+        LastName:
+          type: string
+          description: User's last name.
+        PayrollNumber:
+          type: string
+          description: Payroll number if present.
+        InDate:
+          type: string
+          format: date
+          description: Date of the in punch.
+        InTime:
+          type: string
+          description: Time of the in punch.
+        OutDate:
+          type: string
+          format: date
+          description: Date of the out punch.
+        OutTime:
+          type: string
+          description: Time of the out punch.
+        Tot:
+          type: string
+          description: Total punch pair duration in HH:mm format (e.g., "4:15").
+        InPunchLocation:
+          type: string
+          description: >-
+            Where the in punch was made: IP address (web), timeclock ID, or
+            geolocation (smartphone).
+        OutPunchLocation:
+          type: string
+          description: >-
+            Where the out punch was made: IP address (web), timeclock ID, or
+            geolocation (smartphone).
+        InPunchMethod:
+          type: string
+          description: 'Method of in punch: Time Clock, Manual Edit, Smartphone App, Website.'
+        OutPunchMethod:
+          type: string
+          description: 'Method of out punch: Time Clock, Manual Edit, Smartphone App, Website.'

@@ -1,0 +1,62 @@
+generated: '2026-07-21'
+method: searched
+source: https://uattend.zendesk.com/hc/en-us/articles/48783008798875-uAttend-API
+format: http-status
+description: >-
+  Error catalog for the WorkWell Technologies API (uAttend), captured from the
+  provider's "Common Errors & Troubleshooting" documentation. Errors are NOT
+  RFC 9457 problem+json — the AWS API Gateway front door returns a simple
+  {"message": "..."} envelope (verified live: unauthenticated requests to
+  https://api.workwelltech.com return {"message":"Unauthorized"}), and the
+  /reports/punch endpoint additionally carries a ResponseObject with Success,
+  Keys, and Messages dictionaries for field-level errors.
+envelope:
+  gateway: '{"message": "<human-readable error>"} (AWS API Gateway style)'
+  punch_report: >-
+    Response.Success (boolean), Response.Keys (error keys per field),
+    Response.Messages (human-readable messages per field)
+problems:
+- status: 400
+  title: Bad Request
+  detail: >-
+    Malformed JSON in the request body, or a required field is missing. Check
+    the request body for syntax errors and verify required fields are present.
+- status: 401
+  title: Unauthorized
+  detail: >-
+    The x-api-key header is missing or the key value is incorrect. Verify the
+    header name is exactly x-api-key (lowercase) and that the key value is
+    complete and unmodified.
+- status: 403
+  title: Forbidden — Explicit Deny
+  detail: >-
+    The API key is valid but an AWS identity-based policy is blocking the
+    request based on network origin. This is an IP restriction, not a key
+    issue. Find your outbound IP (curl https://api.ipify.org) and provide it
+    to WorkWell Technologies support for resolution.
+- status: 403
+  title: Forbidden — Other
+  detail: >-
+    The API key is valid but does not have permission to access the requested
+    resource. Contact support to verify key permissions.
+- status: 403
+  title: Forbidden — Missing Authentication Token
+  detail: >-
+    The endpoint URL is incorrect. Verify the URL path, stage (/user,
+    /timecards, or /reports/punch), and HTTP method. Often caused by a typo in
+    the endpoint URL.
+- status: 404
+  title: Not Found
+  detail: >-
+    The endpoint URL is incorrect. Verify the path matches exactly /user,
+    /timecards, or /reports/punch.
+- status: 429
+  title: Too Many Requests
+  detail: >-
+    Rate limit exceeded. Slow down the request frequency and implement retry
+    logic with exponential backoff.
+- status: 500
+  title: Internal Server Error
+  detail: >-
+    An unexpected server-side error occurred. If this persists, contact
+    WorkWell Technologies support with your request details and timestamp.

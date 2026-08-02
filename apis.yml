@@ -1,8 +1,25 @@
 aid: workwell-technologies
 name: Workwell Technologies
-description: Workwell Technologies is a company surfaced as a portfolio company of battery-ventures and
-  added to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment
-  pipeline.
+description: 'Workwell Technologies, Inc. is a Carlsbad, California workforce management
+  company backed by Battery Ventures, best known for its uAttend cloud-connected time
+  and attendance platform and uPunch punch clocks. uAttend pairs biometric time clocks
+  (fingerprint, facial recognition, RFID, voice control) with cloud software for time
+  tracking, scheduling, overtime alerts, and optional payroll processing for small
+  businesses. The WorkWell Technologies API exposes employee, timecard, and punch
+  data from uAttend accounts over HTTPS with API-key authentication, supporting payroll
+  and HRIS integrations.'
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Unknown
+  confidence: low
+  source: []
+  generated: '2026-07-22'
+  method: derived
+image: https://uattend.com/wp-content/uploads/2019/07/uAttendLogo-01.svg
 url: https://raw.githubusercontent.com/api-evangelist/workwell-technologies/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -12,12 +29,71 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-21'
 tags:
 - Company
-apis: []
+- Workforce Management
+- Time Tracking
+- Attendance
+- Payroll
+- Human Resources
+- Time Clocks
+- Biometrics
+- Scheduling
+apis:
+- aid: workwell-technologies:workwell-technologies-punch-reports-api
+  name: Workwell Technologies Punch Reports API
+  description: Raw punch records across a date range
+  humanURL: https://uattend.zendesk.com/hc/en-us/articles/48783008798875-uAttend-API
+  baseURL: https://api.workwelltech.com
+  tags:
+  - Punch Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/workwell-technologies-punch-reports-api-openapi.yml
+  - type: Documentation
+    url: https://uattend.zendesk.com/hc/en-us/articles/48783008798875-uAttend-API
+- aid: workwell-technologies:workwell-technologies-timecards-api
+  name: Workwell Technologies Timecards API
+  description: Per-user, per-pay-period timecards
+  humanURL: https://uattend.zendesk.com/hc/en-us/articles/48783008798875-uAttend-API
+  baseURL: https://api.workwelltech.com
+  tags:
+  - Timecards
+  properties:
+  - type: OpenAPI
+    url: openapi/workwell-technologies-timecards-api-openapi.yml
+  - type: Documentation
+    url: https://uattend.zendesk.com/hc/en-us/articles/48783008798875-uAttend-API
+- aid: workwell-technologies:workwell-technologies-users-api
+  name: Workwell Technologies Users API
+  description: User records for the uAttend account
+  humanURL: https://uattend.zendesk.com/hc/en-us/articles/48783008798875-uAttend-API
+  baseURL: https://api.workwelltech.com
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/workwell-technologies-users-api-openapi.yml
+  - type: Documentation
+    url: https://uattend.zendesk.com/hc/en-us/articles/48783008798875-uAttend-API
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+common:
+- type: Website
+  url: https://workwelltech.com/
+- type: Documentation
+  url: https://uattend.zendesk.com/hc/en-us/articles/48783008798875-uAttend-API
+- type: APIReference
+  url: https://uattend.zendesk.com/hc/en-us/articles/48783008798875-uAttend-API
+- type: Support
+  url: https://uattend.zendesk.com/hc/en-us
+- type: Blog
+  url: https://uattend.com/blog/
+- type: PrivacyPolicy
+  url: https://uattend.com/privacy-policy/
+- type: Login
+  url: https://v2.trackmytime.com/login/login.aspx
