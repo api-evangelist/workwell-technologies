@@ -83,6 +83,10 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: MCPServer
+  url: mcp/workwell-technologies-mcp.yml
+- type: Overlay
+  url: overlays/workwell-technologies-uattend-overlay.yaml
 - type: Website
   url: https://workwelltech.com/
 - type: Documentation
