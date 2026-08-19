@@ -2,28 +2,29 @@ generated: '2026-07-21'
 method: derived
 status: candidate
 source: openapi/workwell-technologies-uattend-openapi.yml
-description: >-
-  Workwell Technologies does not publish an official MCP server (none found in
-  docs, npm, or MCP registries). This is a candidate tool list derived from the
-  documented WorkWell Technologies API (uAttend) operations — one tool per
-  operationId. All operations are read-only data retrievals authenticated with
-  an account-scoped x-api-key header.
+description: Workwell Technologies does not publish an official MCP server (none found in docs, npm, or
+  MCP registries). This is a candidate tool list derived from the documented WorkWell Technologies API
+  (uAttend) operations — one tool per operationId. All operations are read-only data retrievals authenticated
+  with an account-scoped x-api-key header.
 server:
   name: workwell-technologies-uattend
   transport: http
 tools:
 - name: get_users
-  description: >-
-    Retrieve user records for the uAttend account, optionally filtered by
-    UserId, Name, or PayrollNumber.
+  description: Retrieve user records for the uAttend account, optionally filtered by UserId, Name, or
+    PayrollNumber.
   source_operation: openapi/workwell-technologies-uattend-openapi.yml#getUsers
 - name: get_timecard
-  description: >-
-    Retrieve the timecard for a user for the current pay period, or the pay
-    period covering a supplied date.
+  description: Retrieve the timecard for a user for the current pay period, or the pay period covering
+    a supplied date.
   source_operation: openapi/workwell-technologies-uattend-openapi.yml#getTimecard
 - name: get_punch_report
-  description: >-
-    Retrieve raw punch records for one or more users across a date range (max
-    3 months), with optional page-based pagination.
+  description: Retrieve raw punch records for one or more users across a date range (max 3 months), with
+    optional page-based pagination.
   source_operation: openapi/workwell-technologies-uattend-openapi.yml#getPunchReport
+deployment:
+  mode: none
+  verified: derived
+  tools: 3
+  checked: '2026-08-12'
+  source: catalog MCP census

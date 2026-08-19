@@ -1,0 +1,41 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "WorkWell Technologies API (uAttend) Punch Reports Timecards API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Timecards",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve timecard data for a user and pay period",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.workwelltech.com/timecards",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns the timecard for a specified user. If no date is provided, the current pay period is returned. If a date is supplied, the timecard covering that date is returned. All time durations are strings in HH:mm format; dates are yyyy-mm-dd; punch times are 12-hour strings."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,41 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "WorkWell Technologies API (uAttend) Punch Reports Users API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Users",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve user records for the account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.workwelltech.com/user",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns user records for your uAttend account. By default, all users are returned. Use the optional request body parameters to filter by user ID, name, or payroll number. Pass an empty JSON object to return all users."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

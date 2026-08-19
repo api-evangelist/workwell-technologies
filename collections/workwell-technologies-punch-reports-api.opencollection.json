@@ -1,0 +1,41 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "WorkWell Technologies API (uAttend) Punch Reports API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Punch Reports",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve raw punch records across a date range",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.workwelltech.com/reports/punch",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns raw punch records for one or more users over a specified date range. Supports pagination for large result sets. If no user IDs are supplied, punches for all account users are returned. EndDate cannot be more than 3 months after StartDate — for larger ranges, make multiple requests with sequential date windows."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

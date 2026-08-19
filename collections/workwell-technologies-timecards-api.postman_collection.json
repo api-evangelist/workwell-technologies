@@ -1,0 +1,454 @@
+{
+  "item": [
+    {
+      "id": "36a14cbe-2997-47d7-bd2d-776641dfb50b",
+      "name": "Timecards",
+      "description": {
+        "content": "Per-user, per-pay-period timecards",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "2b44a84c-5ccf-4eb9-ab5e-4ddd2372a7a5",
+          "name": "Retrieve timecard data for a user and pay period",
+          "request": {
+            "name": "Retrieve timecard data for a user and pay period",
+            "description": {
+              "content": "Returns the timecard for a specified user. If no date is provided, the current pay period is returned. If a date is supplied, the timecard covering that date is returned. All time durations are strings in HH:mm format; dates are yyyy-mm-dd; punch times are 12-hour strings.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "timecards"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"UserId\": \"<integer>\",\n  \"Date\": \"<date>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b2dd112c-2579-40c0-9ea3-eba456bbcb5b",
+              "name": "The timecard covering the requested pay period.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "timecards"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"UserId\": 12345\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"PayrollNumber\": \"string\",\n  \"ApprovalVerbiage\": \"string\",\n  \"IsLock\": 2018,\n  \"FirstName\": \"string\",\n  \"LastName\": \"string\",\n  \"StartDate\": \"1999-10-17\",\n  \"EndDate\": \"1959-08-23\",\n  \"CurrentPayPeriodStart\": \"string\",\n  \"CurrentPayPeriodEnd\": \"string\",\n  \"Timecard\": {\n    \"StartDate\": \"1965-09-10\",\n    \"EndDate\": \"2019-05-16\",\n    \"FirstName\": \"string\",\n    \"LastName\": \"string\",\n    \"PayrollNumber\": \"string\",\n    \"WeekCount\": 7597,\n    \"Week1\": \"string\",\n    \"Week2\": \"string\",\n    \"Week3\": \"string\",\n    \"Week4\": \"string\",\n    \"Week5\": \"string\",\n    \"Week6\": \"string\",\n    \"RegularTime\": \"string\",\n    \"Overtime1Time\": \"string\",\n    \"Overtime2Time\": \"string\",\n    \"VacationTime\": \"string\",\n    \"HolidayTime\": \"string\",\n    \"SickTime\": \"string\",\n    \"OtherTime\": \"string\",\n    \"SumOfTotalHours\": \"string\",\n    \"RegularGrossPay\": \"string\",\n    \"Overtime1GrossPay\": \"string\",\n    \"Overtime2GrossPay\": \"string\",\n    \"VacationGrossPay\": \"string\",\n    \"HolidayGrossPay\": \"string\",\n    \"SickGrossPay\": \"string\",\n    \"OtherGrossPay\": \"string\",\n    \"TotalGrossPay\": \"string\",\n    \"EmployeeReferenceID\": \"string\",\n    \"ClientReferenceID\": \"string\",\n    \"Workdays\": [\n      {\n        \"Day1\": \"string\",\n        \"Day2\": \"string\",\n        \"Day3\": \"string\",\n        \"RegularTime\": \"string\",\n        \"Overtime1Time\": \"string\",\n        \"Overtime2Time\": \"string\",\n        \"VacationTime\": \"string\",\n        \"HolidayTime\": \"string\",\n        \"SickTime\": \"string\",\n        \"OtherTime\": \"string\",\n        \"PunchPairs\": [\n          {\n            \"PunchId\": \"string\",\n            \"Paycode\": \"string\",\n            \"DepartmentName\": \"string\",\n            \"InDate\": \"string\",\n            \"OutDate\": \"string\",\n            \"InTime\": \"string\",\n            \"OutTime\": \"string\",\n            \"RegularHours\": \"string\",\n            \"Overtime1Hours\": \"string\",\n            \"Overtime2Hours\": \"string\",\n            \"VacationHours\": \"string\",\n            \"HolidayHours\": \"string\",\n            \"SickHours\": \"string\",\n            \"OtherHours\": \"string\",\n            \"TotalHours\": \"string\",\n            \"RegularGrossPay\": 7040.178203084656,\n            \"TotalGrossPay\": 6008.7234451612085,\n            \"Description\": \"string\",\n            \"Note\": \"string\",\n            \"IsLast\": 3163\n          },\n          {\n            \"PunchId\": \"string\",\n            \"Paycode\": \"string\",\n            \"DepartmentName\": \"string\",\n            \"InDate\": \"string\",\n            \"OutDate\": \"string\",\n            \"InTime\": \"string\",\n            \"OutTime\": \"string\",\n            \"RegularHours\": \"string\",\n            \"Overtime1Hours\": \"string\",\n            \"Overtime2Hours\": \"string\",\n            \"VacationHours\": \"string\",\n            \"HolidayHours\": \"string\",\n            \"SickHours\": \"string\",\n            \"OtherHours\": \"string\",\n            \"TotalHours\": \"string\",\n            \"RegularGrossPay\": 3866.3741877103976,\n            \"TotalGrossPay\": 5833.427531174068,\n            \"Description\": \"string\",\n            \"Note\": \"string\",\n            \"IsLast\": 6174\n          }\n        ]\n      },\n      {\n        \"Day1\": \"string\",\n        \"Day2\": \"string\",\n        \"Day3\": \"string\",\n        \"RegularTime\": \"string\",\n        \"Overtime1Time\": \"string\",\n        \"Overtime2Time\": \"string\",\n        \"VacationTime\": \"string\",\n        \"HolidayTime\": \"string\",\n        \"SickTime\": \"string\",\n        \"OtherTime\": \"string\",\n        \"PunchPairs\": [\n          {\n            \"PunchId\": \"string\",\n            \"Paycode\": \"string\",\n            \"DepartmentName\": \"string\",\n            \"InDate\": \"string\",\n            \"OutDate\": \"string\",\n            \"InTime\": \"string\",\n            \"OutTime\": \"string\",\n            \"RegularHours\": \"string\",\n            \"Overtime1Hours\": \"string\",\n            \"Overtime2Hours\": \"string\",\n            \"VacationHours\": \"string\",\n            \"HolidayHours\": \"string\",\n            \"SickHours\": \"string\",\n            \"OtherHours\": \"string\",\n            \"TotalHours\": \"string\",\n            \"RegularGrossPay\": 6573.436488567948,\n            \"TotalGrossPay\": 4421.0809141802165,\n            \"Description\": \"string\",\n            \"Note\": \"string\",\n            \"IsLast\": 1938\n          },\n          {\n            \"PunchId\": \"string\",\n            \"Paycode\": \"string\",\n            \"DepartmentName\": \"string\",\n            \"InDate\": \"string\",\n            \"OutDate\": \"string\",\n            \"InTime\": \"string\",\n            \"OutTime\": \"string\",\n            \"RegularHours\": \"string\",\n            \"Overtime1Hours\": \"string\",\n            \"Overtime2Hours\": \"string\",\n            \"VacationHours\": \"string\",\n            \"HolidayHours\": \"string\",\n            \"SickHours\": \"string\",\n            \"OtherHours\": \"string\",\n            \"TotalHours\": \"string\",\n            \"RegularGrossPay\": 4755.485706735937,\n            \"TotalGrossPay\": 5355.572133651082,\n            \"Description\": \"string\",\n            \"Note\": \"string\",\n            \"IsLast\": 1607\n          }\n        ]\n      }\n    ],\n    \"Tips\": [\n      {\n        \"TipId\": 6585,\n        \"TipCode\": \"string\",\n        \"TotalMinutes\": \"string\",\n        \"TipDepartmentName\": \"string\",\n        \"TotalTipMinute\": \"string\"\n      },\n      {\n        \"TipId\": 8392,\n        \"TipCode\": \"string\",\n        \"TotalMinutes\": \"string\",\n        \"TipDepartmentName\": \"string\",\n        \"TotalTipMinute\": \"string\"\n      }\n    ],\n    \"Accruals\": [\n      {\n        \"Code\": \"string\",\n        \"Accrued\": \"string\",\n        \"Used\": \"string\",\n        \"Available\": \"string\"\n      },\n      {\n        \"Code\": \"string\",\n        \"Accrued\": \"string\",\n        \"Used\": \"string\",\n        \"Available\": \"string\"\n      }\n    ]\n  },\n  \"ExtendedPunchData\": [\n    {\n      \"Date\": \"string\",\n      \"JobPunches\": [\n        {\n          \"UserId\": 7508,\n          \"PunchId\": 9485,\n          \"JobId\": 2592,\n          \"JobNumber\": \"string\",\n          \"JobName\": \"string\",\n          \"JobDetailId\": 2888,\n          \"JobDetailName\": \"string\",\n          \"JobInDate\": \"string\",\n          \"JobInTime\": \"string\",\n          \"JobOutDate\": \"string\",\n          \"JobOutTime\": \"string\",\n          \"DepartmentId\": 4273,\n          \"JobDescription\": \"string\",\n          \"JobNote\": \"string\",\n          \"SubJobDetails\": [\n            {\n              \"value\": \"<Circular reference to #/components/schemas/JobPunches detected>\"\n            },\n            {\n              \"value\": \"<Circular reference to #/components/schemas/JobPunches detected>\"\n            }\n          ]\n        },\n        {\n          \"UserId\": 4935,\n          \"PunchId\": 623,\n          \"JobId\": 9134,\n          \"JobNumber\": \"string\",\n          \"JobName\": \"string\",\n          \"JobDetailId\": 3530,\n          \"JobDetailName\": \"string\",\n          \"JobInDate\": \"string\",\n          \"JobInTime\": \"string\",\n          \"JobOutDate\": \"string\",\n          \"JobOutTime\": \"string\",\n          \"DepartmentId\": 2877,\n          \"JobDescription\": \"string\",\n          \"JobNote\": \"string\",\n          \"SubJobDetails\": [\n            {\n              \"value\": \"<Circular reference to #/components/schemas/JobPunches detected>\"\n            },\n            {\n              \"value\": \"<Circular reference to #/components/schemas/JobPunches detected>\"\n            }\n          ]\n        }\n      ]\n    },\n    {\n      \"Date\": \"string\",\n      \"JobPunches\": [\n        {\n          \"UserId\": 5821,\n          \"PunchId\": 7833,\n          \"JobId\": 12,\n          \"JobNumber\": \"string\",\n          \"JobName\": \"string\",\n          \"JobDetailId\": 5141,\n          \"JobDetailName\": \"string\",\n          \"JobInDate\": \"string\",\n          \"JobInTime\": \"string\",\n          \"JobOutDate\": \"string\",\n          \"JobOutTime\": \"string\",\n          \"DepartmentId\": 7041,\n          \"JobDescription\": \"string\",\n          \"JobNote\": \"string\",\n          \"SubJobDetails\": [\n            {\n              \"value\": \"<Circular reference to #/components/schemas/JobPunches detected>\"\n            },\n            {\n              \"value\": \"<Circular reference to #/components/schemas/JobPunches detected>\"\n            }\n          ]\n        },\n        {\n          \"UserId\": 2474,\n          \"PunchId\": 912,\n          \"JobId\": 4864,\n          \"JobNumber\": \"string\",\n          \"JobName\": \"string\",\n          \"JobDetailId\": 8864,\n          \"JobDetailName\": \"string\",\n          \"JobInDate\": \"string\",\n          \"JobInTime\": \"string\",\n          \"JobOutDate\": \"string\",\n          \"JobOutTime\": \"string\",\n          \"DepartmentId\": 3101,\n          \"JobDescription\": \"string\",\n          \"JobNote\": \"string\",\n          \"SubJobDetails\": [\n            {\n              \"value\": \"<Circular reference to #/components/schemas/JobPunches detected>\"\n            },\n            {\n              \"value\": \"<Circular reference to #/components/schemas/JobPunches detected>\"\n            }\n          ]\n        }\n      ]\n    }\n  ],\n  \"Jobs\": [\n    {\n      \"JobID\": 9942,\n      \"JobNumber\": \"string\",\n      \"JobName\": \"string\"\n    },\n    {\n      \"JobID\": 2963,\n      \"JobNumber\": \"string\",\n      \"JobName\": \"string\"\n    }\n  ],\n  \"Departments\": [\n    {\n      \"DepartmentId\": 4177,\n      \"DepartmentCode\": \"string\",\n      \"DepartmentName\": \"string\"\n    },\n    {\n      \"DepartmentId\": 6163,\n      \"DepartmentCode\": \"string\",\n      \"DepartmentName\": \"string\"\n    }\n  ],\n  \"ExpenseCodes\": [\n    {\n      \"Code\": \"string\"\n    },\n    {\n      \"Code\": \"string\"\n    }\n  ],\n  \"HomeDepartment\": {\n    \"DepartmentId\": 1125,\n    \"DepartmentName\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dee2a8be-4f85-4277-b185-0196de47bb44",
+              "name": "Bad Request — malformed JSON in the request body, or a required field is missing.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "timecards"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"UserId\": 12345\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4431506d-57ea-4610-8afe-f5a1f162d4ab",
+              "name": "Unauthorized — the x-api-key header is missing or the key value is incorrect.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "timecards"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"UserId\": 12345\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f8471729-487f-4743-a5cb-7c5b475fe035",
+              "name": "Forbidden — an AWS identity-based policy is blocking the request (IP/network restriction), the key lacks permission for the resource, or the endpoint URL is incorrect (Missing Authentication Token).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "timecards"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"UserId\": 12345\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "18641a46-8a4f-4cf7-93fc-4c6117cde9fa",
+              "name": "Not Found — the endpoint URL is incorrect. Verify the path matches exactly /user, /timecards, or /reports/punch.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "timecards"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"UserId\": 12345\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "285252f3-743f-4a94-8fbd-cb0c70f87ff1",
+              "name": "Too Many Requests — rate limit exceeded. Slow down request frequency and implement retry logic with exponential backoff.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "timecards"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"UserId\": 12345\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "16bed925-0ff7-4bb1-aa30-2e2e31c1c404",
+              "name": "Internal Server Error — an unexpected server-side error occurred. If this persists, contact WorkWell Technologies support with your request details and timestamp.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "timecards"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"UserId\": 12345\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.workwelltech.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-api-key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "9ade3283-2e0d-4252-ace3-13a09cd98301",
+    "name": "WorkWell Technologies API (uAttend) Punch Reports Timecards API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The WorkWell Technologies API allows you to programmatically retrieve employee, timecard, and punch data from your uAttend account. All endpoints use HTTPS and are authenticated via an API key passed in the x-api-key request header. API keys are account-scoped — they grant access to all data within your uAttend account. Request bodies are JSON objects; even when no parameters are needed, pass an empty JSON object. This OpenAPI was generated by API Evangelist from the provider's published API documentation (https://uattend.zendesk.com/hc/en-us/articles/48783008798875-uAttend-API); the provider does not publish a machine-readable spec.\n\nContact Support:\n Name: WorkWell Technologies Support",
+      "type": "text/plain"
+    }
+  }
+}
