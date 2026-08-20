@@ -71,6 +71,8 @@ apis:
   humanURL: https://uattend.zendesk.com/hc/en-us/articles/48783008798875-uAttend-API
   baseURL: https://api.workwelltech.com
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
