@@ -8,6 +8,18 @@ description: 'Workwell Technologies, Inc. is a Carlsbad, California workforce ma
   businesses. The WorkWell Technologies API exposes employee, timecard, and punch
   data from uAttend accounts over HTTPS with API-key authentication, supporting payroll
   and HRIS integrations.'
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: unknown
   onboarding: unknown
