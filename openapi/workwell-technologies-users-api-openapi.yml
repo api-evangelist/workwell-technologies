@@ -60,26 +60,14 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   responses:
-    TooManyRequests:
-      description: Too Many Requests — rate limit exceeded. Slow down request frequency and implement retry logic with exponential backoff.
+    NotFound:
+      description: Not Found — the endpoint URL is incorrect. Verify the path matches exactly /user, /timecards, or /reports/punch.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Unauthorized — the x-api-key header is missing or the key value is incorrect.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal Server Error — an unexpected server-side error occurred. If this persists, contact WorkWell Technologies support with your request details and timestamp.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Not Found — the endpoint URL is incorrect. Verify the path matches exactly /user, /timecards, or /reports/punch.
       content:
         application/json:
           schema:
@@ -96,6 +84,18 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Too Many Requests — rate limit exceeded. Slow down request frequency and implement retry logic with exponential backoff.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal Server Error — an unexpected server-side error occurred. If this persists, contact WorkWell Technologies support with your request details and timestamp.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
     GetUsersResponse:
       type: object
@@ -105,13 +105,6 @@ components:
           description: User records; each element represents one user.
           items:
             $ref: '#/components/schemas/User'
-    Error:
-      type: object
-      description: 'AWS API Gateway style error envelope, e.g. {"message": "Unauthorized"}.'
-      properties:
-        message:
-          type: string
-          description: Human-readable error message.
     GetUsersRequest:
       type: object
       description: All parameters are optional. Omit them or pass {} to return all users.
@@ -125,6 +118,13 @@ components:
         PayrollNumber:
           type: string
           description: Filter by payroll number.
+    Error:
+      type: object
+      description: 'AWS API Gateway style error envelope, e.g. {"message": "Unauthorized"}.'
+      properties:
+        message:
+          type: string
+          description: Human-readable error message.
     User:
       type: object
       description: A uAttend user record. The /user endpoint returns the core fields by default; the full internal schema (snake_case fields) is documented in the provider's appendix and included here for reference.
