@@ -60,32 +60,8 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   responses:
-    NotFound:
-      description: Not Found — the endpoint URL is incorrect. Verify the path matches exactly /user, /timecards, or /reports/punch.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Unauthorized — the x-api-key header is missing or the key value is incorrect.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: Forbidden — an AWS identity-based policy is blocking the request (IP/network restriction), the key lacks permission for the resource, or the endpoint URL is incorrect (Missing Authentication Token).
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad Request — malformed JSON in the request body, or a required field is missing.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Too Many Requests — rate limit exceeded. Slow down request frequency and implement retry logic with exponential backoff.
       content:
         application/json:
           schema:
@@ -96,15 +72,31 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Too Many Requests — rate limit exceeded. Slow down request frequency and implement retry logic with exponential backoff.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Not Found — the endpoint URL is incorrect. Verify the path matches exactly /user, /timecards, or /reports/punch.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad Request — malformed JSON in the request body, or a required field is missing.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Forbidden — an AWS identity-based policy is blocking the request (IP/network restriction), the key lacks permission for the resource, or the endpoint URL is incorrect (Missing Authentication Token).
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    GetUsersResponse:
-      type: object
-      properties:
-        Users:
-          type: array
-          description: User records; each element represents one user.
-          items:
-            $ref: '#/components/schemas/User'
     GetUsersRequest:
       type: object
       description: All parameters are optional. Omit them or pass {} to return all users.
@@ -125,6 +117,14 @@ components:
         message:
           type: string
           description: Human-readable error message.
+    GetUsersResponse:
+      type: object
+      properties:
+        Users:
+          type: array
+          description: User records; each element represents one user.
+          items:
+            $ref: '#/components/schemas/User'
     User:
       type: object
       description: A uAttend user record. The /user endpoint returns the core fields by default; the full internal schema (snake_case fields) is documented in the provider's appendix and included here for reference.

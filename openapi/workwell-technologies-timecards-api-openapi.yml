@@ -112,6 +112,95 @@ components:
           description: Nested sub-job punch records.
           items:
             $ref: '#/components/schemas/JobPunches'
+    Department:
+      type: object
+      description: A department accessible to the user.
+      properties:
+        DepartmentId:
+          type: integer
+          description: Department identifier.
+        DepartmentCode:
+          type: string
+          description: Department code.
+        DepartmentName:
+          type: string
+          description: Department name.
+    GetTimecardRequest:
+      type: object
+      required:
+      - UserId
+      properties:
+        UserId:
+          type: integer
+          description: The ID of the user whose timecard to retrieve.
+        Date:
+          type: string
+          format: date
+          description: A date within the desired pay period (yyyy-mm-dd). Defaults to the current pay period if omitted.
+    Error:
+      type: object
+      description: 'AWS API Gateway style error envelope, e.g. {"message": "Unauthorized"}.'
+      properties:
+        message:
+          type: string
+          description: Human-readable error message.
+    JobSimple:
+      type: object
+      description: Job information.
+      properties:
+        JobID:
+          type: integer
+          description: Job identifier.
+        JobNumber:
+          type: string
+          description: Job number.
+        JobName:
+          type: string
+          description: Job name.
+        JobDetails:
+          type: array
+          description: Job details.
+          items:
+            type: object
+    Workday:
+      type: object
+      description: One entry per day that has punch activity.
+      properties:
+        Day1:
+          type: string
+          description: Day abbreviation (e.g., "Mon").
+        Day2:
+          type: string
+          description: Short date (e.g., "11/30/19").
+        Day3:
+          type: string
+          description: ISO date (e.g., "2019-11-30").
+        RegularTime:
+          type: string
+          description: Daily regular hours (HH:mm).
+        Overtime1Time:
+          type: string
+          description: Daily overtime 1 hours (HH:mm).
+        Overtime2Time:
+          type: string
+          description: Daily overtime 2 hours (HH:mm).
+        VacationTime:
+          type: string
+          description: Daily vacation hours (HH:mm).
+        HolidayTime:
+          type: string
+          description: Daily holiday hours (HH:mm).
+        SickTime:
+          type: string
+          description: Daily sick hours (HH:mm).
+        OtherTime:
+          type: string
+          description: Daily other hours (HH:mm).
+        PunchPairs:
+          type: array
+          description: List of individual in/out punch pairs for this day.
+          items:
+            $ref: '#/components/schemas/PunchPair'
     GetTimeCardResponse:
       type: object
       description: Top-level wrapper for a timecard response.
@@ -179,6 +268,24 @@ components:
         DepartmentName:
           type: string
           description: Department name.
+    Tip:
+      type: object
+      properties:
+        TipId:
+          type: integer
+          description: Unique tip identifier.
+        TipCode:
+          type: string
+          description: Tip code.
+        TotalMinutes:
+          type: string
+          description: Total minutes for the tip entry.
+        TipDepartmentName:
+          type: string
+          description: Department associated with the tip.
+        TotalTipMinute:
+          type: string
+          description: Total tip minutes.
     Timecard:
       type: object
       description: 'Pay period totals. All time durations are strings in HH:mm format (40 hours = "40:00"). Pay codes: REG = Regular, OT1 = Overtime 1, OT2 = Overtime 2, VAC = Vacation, SIC = Sick, HOL = Holiday, OTH = Other.'
@@ -290,102 +397,6 @@ components:
           description: List of benefit accrual balances.
           items:
             $ref: '#/components/schemas/Accrual'
-    JobSimple:
-      type: object
-      description: Job information.
-      properties:
-        JobID:
-          type: integer
-          description: Job identifier.
-        JobNumber:
-          type: string
-          description: Job number.
-        JobName:
-          type: string
-          description: Job name.
-        JobDetails:
-          type: array
-          description: Job details.
-          items:
-            type: object
-    GetTimecardRequest:
-      type: object
-      required:
-      - UserId
-      properties:
-        UserId:
-          type: integer
-          description: The ID of the user whose timecard to retrieve.
-        Date:
-          type: string
-          format: date
-          description: A date within the desired pay period (yyyy-mm-dd). Defaults to the current pay period if omitted.
-    Workday:
-      type: object
-      description: One entry per day that has punch activity.
-      properties:
-        Day1:
-          type: string
-          description: Day abbreviation (e.g., "Mon").
-        Day2:
-          type: string
-          description: Short date (e.g., "11/30/19").
-        Day3:
-          type: string
-          description: ISO date (e.g., "2019-11-30").
-        RegularTime:
-          type: string
-          description: Daily regular hours (HH:mm).
-        Overtime1Time:
-          type: string
-          description: Daily overtime 1 hours (HH:mm).
-        Overtime2Time:
-          type: string
-          description: Daily overtime 2 hours (HH:mm).
-        VacationTime:
-          type: string
-          description: Daily vacation hours (HH:mm).
-        HolidayTime:
-          type: string
-          description: Daily holiday hours (HH:mm).
-        SickTime:
-          type: string
-          description: Daily sick hours (HH:mm).
-        OtherTime:
-          type: string
-          description: Daily other hours (HH:mm).
-        PunchPairs:
-          type: array
-          description: List of individual in/out punch pairs for this day.
-          items:
-            $ref: '#/components/schemas/PunchPair'
-    TimecardPunchData:
-      type: object
-      description: Extended data grouped by date, available in the ExtendedPunchData list.
-      properties:
-        Date:
-          type: string
-          description: Date the records belong to (yyyy-mm-dd).
-        PunchHistory:
-          type: array
-          description: Punch edit history for the day.
-          items:
-            type: object
-        Tips:
-          type: array
-          description: Tip entries for the day.
-          items:
-            type: object
-        JobPunches:
-          type: array
-          description: Job-specific punch records for the day.
-          items:
-            $ref: '#/components/schemas/JobPunches'
-        Expenses:
-          type: array
-          description: Expense entries for the day.
-          items:
-            type: object
     Accrual:
       type: object
       properties:
@@ -401,13 +412,13 @@ components:
         Available:
           type: string
           description: Remaining available balance (HH:mm, e.g., "60:00").
-    Error:
+    ExpenseCode:
       type: object
-      description: 'AWS API Gateway style error envelope, e.g. {"message": "Unauthorized"}.'
+      description: An expense code available on the account.
       properties:
-        message:
+        Code:
           type: string
-          description: Human-readable error message.
+          description: Expense code.
     PunchPair:
       type: object
       description: One entry per in/out punch pair. The last punch pair of a day has IsLast = 1.
@@ -472,47 +483,36 @@ components:
         IsLast:
           type: integer
           description: 1 if this is the last punch pair for the day.
-    Department:
+    TimecardPunchData:
       type: object
-      description: A department accessible to the user.
+      description: Extended data grouped by date, available in the ExtendedPunchData list.
       properties:
-        DepartmentId:
-          type: integer
-          description: Department identifier.
-        DepartmentCode:
+        Date:
           type: string
-          description: Department code.
-        DepartmentName:
-          type: string
-          description: Department name.
-    ExpenseCode:
-      type: object
-      description: An expense code available on the account.
-      properties:
-        Code:
-          type: string
-          description: Expense code.
-    Tip:
-      type: object
-      properties:
-        TipId:
-          type: integer
-          description: Unique tip identifier.
-        TipCode:
-          type: string
-          description: Tip code.
-        TotalMinutes:
-          type: string
-          description: Total minutes for the tip entry.
-        TipDepartmentName:
-          type: string
-          description: Department associated with the tip.
-        TotalTipMinute:
-          type: string
-          description: Total tip minutes.
+          description: Date the records belong to (yyyy-mm-dd).
+        PunchHistory:
+          type: array
+          description: Punch edit history for the day.
+          items:
+            type: object
+        Tips:
+          type: array
+          description: Tip entries for the day.
+          items:
+            type: object
+        JobPunches:
+          type: array
+          description: Job-specific punch records for the day.
+          items:
+            $ref: '#/components/schemas/JobPunches'
+        Expenses:
+          type: array
+          description: Expense entries for the day.
+          items:
+            type: object
   responses:
-    Forbidden:
-      description: Forbidden — an AWS identity-based policy is blocking the request (IP/network restriction), the key lacks permission for the resource, or the endpoint URL is incorrect (Missing Authentication Token).
+    TooManyRequests:
+      description: Too Many Requests — rate limit exceeded. Slow down request frequency and implement retry logic with exponential backoff.
       content:
         application/json:
           schema:
@@ -535,8 +535,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Too Many Requests — rate limit exceeded. Slow down request frequency and implement retry logic with exponential backoff.
+    Forbidden:
+      description: Forbidden — an AWS identity-based policy is blocking the request (IP/network restriction), the key lacks permission for the resource, or the endpoint URL is incorrect (Missing Authentication Token).
       content:
         application/json:
           schema:
