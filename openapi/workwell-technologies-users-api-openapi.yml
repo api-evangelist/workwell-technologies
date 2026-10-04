@@ -60,6 +60,12 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   responses:
+    NotFound:
+      description: Not Found — the endpoint URL is incorrect. Verify the path matches exactly /user, /timecards, or /reports/punch.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Unauthorized — the x-api-key header is missing or the key value is incorrect.
       content:
@@ -78,12 +84,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Not Found — the endpoint URL is incorrect. Verify the path matches exactly /user, /timecards, or /reports/punch.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     BadRequest:
       description: Bad Request — malformed JSON in the request body, or a required field is missing.
       content:
@@ -97,26 +97,6 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
-    GetUsersRequest:
-      type: object
-      description: All parameters are optional. Omit them or pass {} to return all users.
-      properties:
-        UserId:
-          type: integer
-          description: Filter to a specific user by their numeric ID.
-        Name:
-          type: string
-          description: Filter by partial or full name match.
-        PayrollNumber:
-          type: string
-          description: Filter by payroll number.
-    Error:
-      type: object
-      description: 'AWS API Gateway style error envelope, e.g. {"message": "Unauthorized"}.'
-      properties:
-        message:
-          type: string
-          description: Human-readable error message.
     GetUsersResponse:
       type: object
       properties:
@@ -162,6 +142,26 @@ components:
         EmployeeReferenceNote:
           type: string
           description: Notes associated with the employee reference.
+    Error:
+      type: object
+      description: 'AWS API Gateway style error envelope, e.g. {"message": "Unauthorized"}.'
+      properties:
+        message:
+          type: string
+          description: Human-readable error message.
+    GetUsersRequest:
+      type: object
+      description: All parameters are optional. Omit them or pass {} to return all users.
+      properties:
+        UserId:
+          type: integer
+          description: Filter to a specific user by their numeric ID.
+        Name:
+          type: string
+          description: Filter by partial or full name match.
+        PayrollNumber:
+          type: string
+          description: Filter by payroll number.
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

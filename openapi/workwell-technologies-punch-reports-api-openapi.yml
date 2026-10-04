@@ -70,6 +70,12 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   responses:
+    NotFound:
+      description: Not Found — the endpoint URL is incorrect. Verify the path matches exactly /user, /timecards, or /reports/punch.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Unauthorized — the x-api-key header is missing or the key value is incorrect.
       content:
@@ -88,12 +94,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Not Found — the endpoint URL is incorrect. Verify the path matches exactly /user, /timecards, or /reports/punch.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     BadRequest:
       description: Bad Request — malformed JSON in the request body, or a required field is missing.
       content:
@@ -107,6 +107,34 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
+    PunchReportResponse:
+      type: object
+      properties:
+        Response:
+          $ref: '#/components/schemas/ResponseObject'
+        UsePaging:
+          type: boolean
+          description: Whether results were paginated.
+        PageSize:
+          type: integer
+          description: Records per page.
+        PageNumber:
+          type: integer
+          description: Current page (0-indexed).
+        Total:
+          type: integer
+          description: Total matching records (when paging is off).
+        UserIds:
+          type: array
+          description: User IDs included in results. Empty = all users.
+          items:
+            type: integer
+            format: int64
+        PunchReportLineItems:
+          type: array
+          description: The punch records.
+          items:
+            $ref: '#/components/schemas/PunchReportLineItem'
     PunchReportLineItem:
       type: object
       description: One record per in/out punch pair.
@@ -235,34 +263,6 @@ components:
         message:
           type: string
           description: Human-readable error message.
-    PunchReportResponse:
-      type: object
-      properties:
-        Response:
-          $ref: '#/components/schemas/ResponseObject'
-        UsePaging:
-          type: boolean
-          description: Whether results were paginated.
-        PageSize:
-          type: integer
-          description: Records per page.
-        PageNumber:
-          type: integer
-          description: Current page (0-indexed).
-        Total:
-          type: integer
-          description: Total matching records (when paging is off).
-        UserIds:
-          type: array
-          description: User IDs included in results. Empty = all users.
-          items:
-            type: integer
-            format: int64
-        PunchReportLineItems:
-          type: array
-          description: The punch records.
-          items:
-            $ref: '#/components/schemas/PunchReportLineItem'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
